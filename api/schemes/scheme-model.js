@@ -33,39 +33,28 @@ async function findById(scheme_id) {
     steps: steps,
   };
   return result;
-  /*
-    4B- Using the array obtained and vanilla JavaScript, create an object with
-    the structure below, for the case _when steps exist_ for a given `scheme_id`:
-
-      {
-        "scheme_id": 1,
-        "scheme_name": "World Domination",
-        "steps": [
-          {
-            "step_id": 2,
-            "step_number": 1,
-            "instructions": "solve prime number theory"
-          },
-          {
-            "step_id": 1,
-            "step_number": 2,
-            "instructions": "crack cyber security"
-          },
-          // etc
-        ]
-      }
-
-    5B- This is what the result should look like _if there are no steps_ for a `scheme_id`:
-
-      {
-        "scheme_id": 7,
-        "scheme_name": "Have Fun!",
-        "steps": []
-      }
-  */
 }
 
-function findSteps(scheme_id) {
+async function findSteps(scheme_id) {
+  const rows = await db("schemes as sc")
+    .leftJoin("steps as st", "st.scheme_id", "sc.scheme_id")
+    .select("st.*", "sc.scheme_name", "sc.scheme_id")
+    .where("sc.scheme_id", scheme_id)
+    .orderBy("st.step_number");
+
+  let steps;
+  if (!rows[0].step_id) {
+    steps = [];
+  } else {
+    steps = rows.map((row) => ({
+      step_id: row.step_id,
+      step_number: row.step_number,
+      instructions: row.instructions,
+      scheme_name: row.scheme_name,
+    }));
+  }
+
+  return steps;
   // EXERCISE C
   /*
     1C- Build a query in Knex that returns the following data.

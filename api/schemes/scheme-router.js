@@ -17,27 +17,6 @@ router.get("/", (req, res, next) => {
     .catch(next);
 });
 
-/*
-  [GET] /api/schemes/2
-
-  response:
-  {
-    "scheme_id": 2,
-    "scheme_name": "Get Rich Quick",
-    "steps": [
-      {
-          "step_id": 5,
-          "step_number": 1,
-          "instructions": "collect all the sheep in Scotland"
-      },
-      {
-          "step_id": 4,
-          "step_number": 2,
-          "instructions": "profit"
-      }
-    ]
-  }
-*/
 router.get("/:scheme_id", checkSchemeId, (req, res, next) => {
   const { scheme_id } = req.params;
 
