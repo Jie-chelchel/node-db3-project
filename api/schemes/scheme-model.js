@@ -1,23 +1,16 @@
-function find() { // EXERCISE A
-  /*
-    1A- Study the SQL query below running it in SQLite Studio against `data/schemes.db3`.
-    What happens if we change from a LEFT join to an INNER join?
+const { resourceLimits } = require("worker_threads");
+const db = require("../../data/db-config");
 
-      SELECT
-          sc.*,
-          count(st.step_id) as number_of_steps
-      FROM schemes as sc
-      LEFT JOIN steps as st
-          ON sc.scheme_id = st.scheme_id
-      GROUP BY sc.scheme_id
-      ORDER BY sc.scheme_id ASC;
+async function find() {
+  const result = await db("schemes as sc")
+    .join("steps as st", "st.scheme_id", "st.scheme_id")
+    .select("sc.scheme_id", "scheme_name", "step_number");
 
-    2A- When you have a grasp on the query go ahead and build it in Knex.
-    Return from this function the resulting dataset.
-  */
+  console.log(result);
 }
 
-function findById(scheme_id) { // EXERCISE B
+function findById(scheme_id) {
+  // EXERCISE B
   /*
     1B- Study the SQL query below running it in SQLite Studio against `data/schemes.db3`:
 
@@ -85,7 +78,8 @@ function findById(scheme_id) { // EXERCISE B
   */
 }
 
-function findSteps(scheme_id) { // EXERCISE C
+function findSteps(scheme_id) {
+  // EXERCISE C
   /*
     1C- Build a query in Knex that returns the following data.
     The steps should be sorted by step_number, and the array
@@ -108,13 +102,15 @@ function findSteps(scheme_id) { // EXERCISE C
   */
 }
 
-function add(scheme) { // EXERCISE D
+function add(scheme) {
+  // EXERCISE D
   /*
     1D- This function creates a new scheme and resolves to _the newly created scheme_.
   */
 }
 
-function addStep(scheme_id, step) { // EXERCISE E
+function addStep(scheme_id, step) {
+  // EXERCISE E
   /*
     1E- This function adds a step to the scheme with the given `scheme_id`
     and resolves to _all the steps_ belonging to the given `scheme_id`,
@@ -128,4 +124,4 @@ module.exports = {
   findSteps,
   add,
   addStep,
-}
+};
