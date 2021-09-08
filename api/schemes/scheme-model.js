@@ -2,12 +2,12 @@ const db = require("../../data/db-config");
 
 async function find() {
   const result = await db("schemes as sc")
-    .join("steps as st", "st.scheme_id", "st.scheme_id")
-    .count("st.step_number as number_of_steps")
-    .select("sc.scheme_id", "scheme_name", "number_of_steps")
-    .groupBy("st.scheme_id");
+    .leftJoin("steps as st", "st.scheme_id", "sc.scheme_id")
+    .select("sc.*")
+    .count("st.step_id as number_of_steps")
+    .groupBy("sc.scheme_id");
 
-  console.log(result);
+  return result;
 }
 
 function findById(scheme_id) {
